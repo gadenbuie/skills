@@ -23,6 +23,7 @@ Values:
 - Targeted tests: <commands>
 - Commit trailer: <e.g. Refs: project#ref>
 - Root: <root ref>
+- Tracker identity: <e.g. KATA_TEAMMATE=<name>, KATA_INBOX_USER=<actor>/<name>, or none>   (implementer, fixer)
 - Reviewer tier: <tier>   (review-subagent.md only)
 - Integration worktree / branch: <path> / <branch>   (lander only)
 

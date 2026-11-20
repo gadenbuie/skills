@@ -80,7 +80,7 @@ Push toward the cheaper, faster tier without giving up quality. Agents tend to a
 - Dispatch every ready task (dependencies landed) at once, up to what the harness runs well in parallel. Run tasks that touch the same code one after another, or give them disjoint files.
 - For each task, choose its worktree path and branch (for example `task/<ref>-<slug>`) and record the current integration head as its Base: the start of its review unit.
 - Write the prompt from `assets/prompt-subagent.md`: the role, file pointers, the task reference, the docs to read and the values. Point at files instead of restating them; add notes only for what is specific to the task. Subagents have not seen this conversation, so give absolute paths.
-- Mark the task in progress on the tracker.
+- Mark the task in progress on the tracker as its tracker file says (for kata, the worker claims it and sets its own working signal), and keep your own signal on the root item current as the run moves through its phases.
 
 ## 4. Collect
 
@@ -106,7 +106,7 @@ If the lander stops (a conflict that needs judgement, failing tests after the me
 
 1. Run the repo's full checks (the CI-equivalent target, such as `just check`, `make check`, `npm test`, `cargo test`) on the integration branch, unless the last landing already ran them on the current head and recorded a green result. Route failures to a `medium` fixer with the output, then rerun.
 1. Review the whole integration branch against its target: `roborev review --branch --base <target>`, or a fresh `high` reviewer (`assets/roles/reviewer.md`). A `high` agent triages the findings (`assets/roles/triage.md`) and gives fix specs to `medium` fixers. One round; a second only for fixes to high, critical or blocking findings. Rerun the full checks only if the fixes were significant; small fixes need only their targeted tests. Do not chase a clean final run any more than a clean review.
-1. Record the outcome on the root item: what landed, what was deferred, open decisions, the integration branch and its head commit.
+1. Record the outcome on the root item: what landed, what was deferred, open decisions, the integration branch and its head commit. Leave the root item's working signal truthful for the user (for kata, `needs-human` with "ready for merge decision" unless you closed it).
 1. Report to the user. Merging the integration branch into its target, opening a PR or publishing is their call unless they asked you to do it.
 
 ## Gotchas
