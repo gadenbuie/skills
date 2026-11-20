@@ -62,6 +62,16 @@ Show the operator the outline: what each leaf does, its tier, what is parallel o
 
 Create issues with `kata create --body-file <path> --idempotency-key <stable-key> --agent`, using `--parent` for containment and `--blocked-by` for dependencies. Write bodies from `assets/templates.md`.
 
+### Kata mechanics
+
+Add `--agent` to every kata command. Search first and reuse a look-alike. Create each issue in one call, for example:
+
+`kata create "<title>" --body-file <path> --parent <ref> --blocked-by <ref> --priority <0-4> --label <label> --meta agent.profile=<tier> --idempotency-key <stable-key> --agent`
+
+- Leave every created issue unclaimed, with no `work.*` keys; the worker's claim is the first signal. Do not claim leaves or start work on them.
+- Retire issues that a re-plan replaces with `kata close <ref> --superseded-by <ref> -m "<why>" --agent` (or `--duplicate-of`, or `--wontfix` for dropped work), never by deleting. Never run `kata delete` or `kata purge`.
+- Re-planning an existing issue: claim it, set `work.attention ok` with a one-line `work.attention_msg`, and set `needs-human` while waiting for the operator's confirmation at step 2. At hand-off release it (`kata unassign <ref> --agent`) so the router can claim it.
+
 ### Size
 
 - Target work that one agent handles comfortably in a modest context, roughly 200k tokens; the operator's or repository's numbers win. In a harness without subagents one agent may work several leaves in turn; size them the same, since each leaf is one review unit.
@@ -93,7 +103,7 @@ A body is the final plan for one task, self-contained for a fresh agent with no 
 ### Links, metadata and labels
 
 - `agent.profile` on every leaf.
-- Record the target branch on the root (the project's key, such as `work.branch`, or the body), and attach every task to it as the project does (label or metadata) so the work filters out of the general backlog.
+- Record the target branch in the root's body, and attach every task to it with the project's label convention so the work filters out of the general backlog. Never write `work.*` keys: `work.branch` and the attention keys belong to whoever claims the work (the router on the root, a worker on its leaf), not to the planner.
 - **Blockers are semantic:** `blocked-by` only when the work needs the other task's code or decision landed, with the reason in the body. Never block just to force an order; preferred order is priority. Tasks that only share files get a note in both bodies naming the files; the router serializes them.
 - **Children never block their parent,** and no task is blocked by its own container (deadlock). Containment does not gate readiness. A downstream task needing a whole unit may be blocked by the container.
 - `kata ready` lists containers and epics, since parent links do not block. Routers never work them; do not add blockers to hide them.
@@ -126,4 +136,4 @@ A body is the final plan for one task, self-contained for a fresh agent with no 
 
 ## 5. Hand off
 
-Comment on the root (epic or single task): outline, tier per leaf, sequencing and parallel groups, what was deferred and where, decisions taken, target branch. Tell the operator the root ref with that outline; next, hand it to a router such as `/route-work <root ref>`.
+Comment on the root (epic or single task): outline, tier per leaf, sequencing and parallel groups, what was deferred and where, decisions taken, target branch. Leave the root and all leaves unclaimed. Tell the operator the root ref with that outline; next, hand it to a router such as `/route-work <root ref>`.
