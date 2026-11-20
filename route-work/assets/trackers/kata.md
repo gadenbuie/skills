@@ -10,7 +10,7 @@ Add `--agent` to every kata command. Refs are `<project>#<id>`, or a short id in
 
 ## Working signals
 
-Every issue being worked carries a signal: it is claimed, `work.attention` says whether it is moving, and `work.attention_msg` says why in one line. Only the issue's owner writes its `work.*` keys; everyone else reads them. Never write `work.*` on a closed issue.
+Every issue being worked carries a signal: it is claimed, `work.attention` says whether it is moving, and `work.attention_msg` says why in one line. Only the issue's owner writes its `work.*` keys; everyone else reads them. Never write `work.*` on a closed issue. Ownership is per actor, not per teammate: the router and its subagents share one actor, so kata does not stop one from claiming or writing another's issue. Keeping to this split is on you.
 
 - `work.attention ok`: unblocked and moving.
 - `work.attention stuck`: blocked; `work.attention_msg` says on what.
@@ -38,7 +38,7 @@ You own the signal on the root item for the whole run, and on any leaf you work 
 - **Back to work:** set `ok` again as soon as you resume.
 - **End of session:** if the root is not closed, the pair must describe the hand-off for the next router. Never leave `ok` on a run that has stopped.
 - **Workers' signals:** read them with `kata show <ref>`. Do not write a worker's `work.*` while it is live.
-- **On collecting a task:** `kata claim <ref> --agent` (if the worker did not release it, unassign it first), set `work.attention ok` and `work.attention_msg "landing"`, then close it after the lander merges. A task a worker returned unowned with `ok` is yours to take over this way.
+- **On collecting a task:** `kata claim <ref> --agent`, set `work.attention ok` and `work.attention_msg "landing"`, then close it after the lander merges. A task a worker returned unowned with `ok` is yours to take over this way.
 - **Identity:** give each subagent its own `KATA_TEAMMATE=<name>` and `KATA_INBOX_USER=<actor>/<name>`, keeping the router's actor.
 - **Waiting on workers:** `kata wait <refs> --until attention --any --timeout <seconds> --agent` returns when a worker goes `needs-human` or `stuck`, or closes.
 
