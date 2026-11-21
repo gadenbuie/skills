@@ -5,7 +5,7 @@ disable-model-invocation: true
 argument-hint: "<design doc path | kata ref | description of the work> [notes]"
 metadata:
   author: Garrick Aden-Buie (@gadenbuie)
-  version: "1.0"
+  version: "1.1"
 ---
 
 # Kata plan
@@ -21,6 +21,7 @@ You are the **planner**. Turn what the user names (a design document, a kata iss
 ## Workflow
 
 - [ ] 1. Orient: design, conventions, existing issues, what has landed
+- [ ] 1b. If the `work-shaping` skill is available, read its references (see below); required before step 2
 - [ ] 2. Shape: propose the smallest tree; the operator confirms it before you create anything
 - [ ] 3. Write: create the issues and their bodies
 - [ ] 4. Check the tree
@@ -32,6 +33,15 @@ You are the **planner**. Turn what the user names (a design document, a kata iss
 1. `kata search` and reuse existing issues. When re-planning, read the epic's decision comments and the closed leaves' hand-offs; plan against what landed, not the old bodies.
 1. A design gap that changes *what* gets built is the operator's: amend the design with them first. If documents conflict, the design wins; amend the wrong one rather than writing a new one.
 1. Record any baseline you verify (checks green at the branch point, a behavior confirmed) on the first task that depends on it, so its implementer need not rerun it.
+
+## 1b. Read the work-shaping references
+
+This skill works on its own. If the `work-shaping` skill is installed, it is optional supporting material for this workflow and replaces no step; skip this section when it is not. **Before you outline, sketch or propose any tree,** load it and read, in full, with your own file reads in this session:
+
+- `references/decompose.md` and `references/sequence.md` always;
+- `references/dispatch.md` when any units are similar or could run in parallel.
+
+Loading the skill is not reading its references. Do not defer this to "before the final plan": the outline you show the operator is already the plan. If you have not read these files yet, stop and read them now. State in one line which you read, then continue.
 
 ## 2. Shape
 
