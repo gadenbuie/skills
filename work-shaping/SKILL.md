@@ -3,7 +3,7 @@ name: work-shaping
 description: "Load when you are about to write a plan for non-trivial work (splitting it into tasks, issues or a dependency graph), or about to interpret and schedule an existing plan (deciding what runs in parallel, what stays serial, in what order, with how many workers). Especially when the work has repeated near-identical units (migrations, batch edits, N similar modules or reviews), hidden dependencies or a shared resource, or is long-running or has side effects. Load alongside kata-plan or route-work sessions. Do not load for a single atomic task."
 metadata:
   author: Garrick Aden-Buie (@gadenbuie)
-  version: "1.0"
+  version: "1.1"
 ---
 
 # Work shaping
@@ -12,9 +12,17 @@ How work is split, ordered and dispatched changes its cost, speed and correctnes
 
 **The one thing to get right:** two opposite errors cost the same, *serializing independent work* (seven identical units handed to one worker) and *parallelizing dependent work* (B needs A's output). Verify independence before choosing fan-out width. When units are independent and similar, do one first as a verified exemplar, then fan out the rest against it.
 
+## Read the references before you plan or schedule
+
+**This file is an index, not the method.** The patterns that change outcomes (the independence test, the exemplar brief, sizing a leaf, width and pacing, resuming a failed run) are only in `references/`. Skimming this file and planning from memory is the common failure: the plan looks reasonable and misses exactly what the references catch.
+
+1. Before you write, outline or propose any plan, or decide any order, width or parallelism, open the reference files for your situation (table below, or the session list) with your own file reads. Do it now, not "before the final plan": the first outline is already the plan.
+2. A reference you intended to read later is a reference you did not read. If you catch yourself thinking "I'll check that before finalizing", read it now instead.
+3. After reading, say in one line which files you read and the one change they made to your plan. If they changed nothing, re-read the one that matches your riskiest unit.
+
 ## If you are in a kata-plan or route-work session
 
-These skills already set the tree limits, tiers, sizing, landing and review rules. Do not override them; use this skill inside them, for the parts below.
+If the user invoked `/kata-plan` or `/route-work`, that skill is already loaded and is the primary workflow; this one supplies reading for it. Read the references named below before planning or scheduling. Those skills already set the tree limits, tiers, sizing, landing and review rules. Do not override them; use this skill inside them, for the parts below.
 
 ### In kata-plan (step 2 Shape, step 4 Check the tree)
 
@@ -38,7 +46,7 @@ Apply the patterns directly and keep the shape note (below) with the plan.
 
 ## Which reference answers your question
 
-If you are asking any of these, read the file before answering from memory.
+If you are asking any of these, read the file before answering from memory. When unsure which applies, read `decompose.md` and `dispatch.md`.
 
 | Question | Read |
 | --- | --- |
