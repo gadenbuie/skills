@@ -5,7 +5,7 @@ disable-model-invocation: true
 argument-hint: "<tracker: kata epic ref | GitHub issue URL | path to plan file or folder> [notes]"
 metadata:
   author: Garrick Aden-Buie (@gadenbuie)
-  version: "1.0"
+  version: "1.1"
 ---
 
 # Route work
@@ -36,6 +36,7 @@ Subagents read their instructions from this skill's files; you point them at the
 Track these steps for yourself; task state lives only in the tracker.
 
 - [ ] 1. Orient: read the tracker, repo instructions and design; get a sense of the work and how to move through it
+- [ ] 1b. If the `work-shaping` skill is available, read its references (see below); required before any ordering, sizing or dispatch decision
 - [ ] 2. Set up: review method, tier mapping, integration branch, baseline
 - [ ] 3. Dispatch ready tasks in parallel, each in its own worktree
 - [ ] 4. Collect each implementer's report and check it
@@ -50,6 +51,16 @@ Track these steps for yourself; task state lives only in the tracker.
 1. Size each run to what fits comfortably in one agent session. Do not assume a subagent can manage its own session; it may not know how full its context is. Scope as best you can, then check the session when the agent returns (step 4). The comfortable size depends on the harness and the operator; follow the user's or repo's numbers if given (as a rough default, about 200k tokens of context). Split a task that is likely to exceed it, and batch several small related tasks into one run. Record the split or grouping in the tracker.
 1. Check whether another router already worked on this. Look for an integration branch and worktree recorded on the root item, tasks already in progress, done or landed, tracker comments with decisions, tier assignments, splits, review dispositions and baseline results, and commits on the integration branch. Treat what earlier runs recorded as settled: continue from the current state and do not redo it. Do not repeat plan review, task sizing or splits, tier assignment, review-method choice, or reviews of units that already have one. Re-dispatch only tasks that are not started or not landed; for a task in progress with no live agent, inspect its branch and worktree and continue from there with a fresh agent rather than restarting the task. Redo a step only when the tracker or branch shows it was left incomplete, or the plan changed since.
 1. Note gaps rather than guess: a task with no acceptance criteria, an unclear dependency, a task that does not fit a session. Fix small gaps in the tracker yourself and say so there. Ask the user about anything that changes what gets built.
+
+### Read the work-shaping references
+
+This skill works on its own. If the `work-shaping` skill is installed, it is optional supporting material for this workflow and replaces no step; skip this section when it is not. **Before you decide what runs in parallel, in what order, at what width, or whether any leaf needs splitting, and before step 2,** load it and read, in full, with your own file reads in this session:
+
+- `references/dispatch.md` and `references/flow.md` always;
+- `references/sequence.md` when ordering or the critical path is in question;
+- `references/decompose.md` when any leaf may be oversized or the plan looks wrongly split.
+
+Loading the skill is not reading its references. Do not defer this to a later step: the first dispatch is the schedule. If you have not read these files yet, stop and read them now. State in one line which you read, then continue.
 
 ## 2. Set up
 
@@ -77,6 +88,7 @@ Push toward the cheaper, faster tier without giving up quality. Agents tend to a
 
 ## 3. Dispatch
 
+- If `work-shaping` is installed, dispatch nothing until its references above are read.
 - Dispatch every ready task (dependencies landed) at once, up to what the harness runs well in parallel. Run tasks that touch the same code one after another, or give them disjoint files.
 - For each task, choose its worktree path and branch (for example `task/<ref>-<slug>`) and record the current integration head as its Base: the start of its review unit.
 - Write the prompt from `assets/prompt-subagent.md`: the role, file pointers, the task reference, the docs to read and the values. Point at files instead of restating them; add notes only for what is specific to the task. Subagents have not seen this conversation, so give absolute paths.
